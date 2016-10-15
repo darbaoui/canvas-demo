@@ -1,8 +1,3 @@
-import Vue from 'vue';                //l'integration de la librairie Vuejs
-require('fabric');                    //l'integration de la librairie fabric
-var VueFire = require('vuefire')      //l'integration de la librairie vuefire pour travailler avec firebase sur vuejs sur manier simple
-var Firebase = require('firebase')    //l'integration de la librairie firebase ou lieu de l'injecter dans la page pricipale
-Vue.use(VueFire)
 var config = {
     apiKey: "AIzaSyBz5IgqyTM0ltgXqEymjDDtz53nQxF85CM",
     authDomain: "web-demo-8b956.firebaseapp.com",
@@ -10,12 +5,16 @@ var config = {
     storageBucket: "web-demo-8b956.appspot.com",
     messagingSenderId: "983297345772"
   };
-var firebaseApp=Firebase.initializeApp(config);
+var firebaseApp=firebase.initializeApp(config);
 var db = firebaseApp.database();
+Vue.config.devtools = true;
+var canvas = this.__canvas = new fabric.Canvas('canvas');
+fabric.Object.prototype.transparentCorners = false;
+
 new Vue({
-  el: 'html',
+  el: '#app',
   data: {
-    		canvas:{
+        canvas:{
 
         },
         active:false,
@@ -23,6 +22,8 @@ new Vue({
         encours:false,
         delete:false,
         b:[],
+ 
+    
   },
   firebase: {
     canva_db: db.ref('canvas')
@@ -185,10 +186,10 @@ new Vue({
     UpdateJsonFile:function(uid,element){
               
       this.AddToJSON();   
-    }  
-  }, 
+    } 
+  },
   ready:function(){
-     self=this;
+    self=this;
      this.$firebaseRefs.canva_db.once("value", function(snapshot) {
         for (var x in snapshot.val()) {
             var xRef = firebaseApp.database().ref("canvas/"+x);
@@ -204,9 +205,6 @@ new Vue({
       })
 
     document.addEventListener("click",this.clickCheck);
-    var canvas = new fabric.Canvas('canvas');
-    this.canvas=canvas;
-
-
+    this.canvas=canvas;  
   }
 });
